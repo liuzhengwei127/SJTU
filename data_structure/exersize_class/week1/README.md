@@ -1,1 +1,1 @@
-I know there are still many bugs. Don't worry, I'll fix them up.
+At the beginning I need to emphasize that I know there are still many bugs. But don't worry, I'll fix them up.
