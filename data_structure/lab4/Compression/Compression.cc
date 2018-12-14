@@ -15,98 +15,118 @@ struct Node{
     Node* right = NULL;
 };
 
-struct cmp{
-    bool operator()(Node* a,Node* b)
+class HuffmanTree
+{
+public:
+    HuffmanTree(map<char,int> ch_count)
     {
-        return a->sum > b->sum;
+        for(auto it = ch_count.begin(); it != ch_count.end(); it++)
+        {
+            Node* node =new Node{it->first,it->second};
+            heap.push(node);
+        }
+        while(!heap.empty())
+        {
+            Node* left = heap.top();
+            heap.pop();
+            if (!heap.empty())
+            {
+                Node* right = heap.top();
+                heap.pop();
+                Node* parent = new Node;
+                parent->sum = left->sum + right->sum;
+                parent->left = left;
+                parent->right = right;
+                heap.push(parent);
+            }
+            else
+            {
+                root = left;
+            }
+        }
+        if (root != NULL)
+        GenerateHfmcode(hfmtreecode, root);
+    }
+
+    ~HuffmanTree()
+    {
+        release(root);
+    }
+
+    string getcode(char ch)
+    {
+        return hfmtreecode[ch];
+    }
+
+    Node* getroot()
+    {
+        return root;
+    }
+
+private:
+    struct cmp{
+        bool operator()(Node* a,Node* b)
+        {
+            return a->sum > b->sum;
+        }
+    };
+
+    Node* root = NULL;
+    map<char,string> hfmtreecode;
+    priority_queue<Node*, vector<Node*>, cmp> heap;
+
+    void GenerateHfmcode(map<char,string>& hfmtreecode, Node* node, string code="")
+    {
+        if (node->left == NULL && node->right == NULL)
+        {
+            hfmtreecode[node->ch] = code;
+        }
+        else
+        {
+            GenerateHfmcode(hfmtreecode,node->left,code+"0");
+            GenerateHfmcode(hfmtreecode,node->right,code+"1");
+        }
+    }
+
+    void release(Node* node)
+    {
+        if (node == NULL)
+            return;
+        if (node->left == NULL && node->right == NULL)
+        {
+            delete node;
+        }
+        else
+        {
+            release(node->left);
+            release(node->right);
+            delete node;
+        }
     }
 };
-
-void naiveCopy(string inputFilename, string outputFilename) {
-  ofstream ofs(outputFilename.c_str(), ios::out | ios::binary);
-  ifstream ifs(inputFilename.c_str(), ios::in | ios::binary);
-  char c;
-  while (ifs.get(c)) ofs.put(c);
-  ofs.close();
-  ifs.close();
-}
-
-void GenerateHfmcode(map<char,string>& hfmtree, Node* node, string code="")
-{
-    if (node->left == NULL && node->right == NULL)
-    {
-        hfmtree[node->ch] = code;
-    }
-    else
-    {
-        GenerateHfmcode(hfmtree,node->left,code+"0");
-        GenerateHfmcode(hfmtree,node->right,code+"1");
-    }
-}
-
-void release(Node* node)
-{
-    if (node == NULL)
-        return;
-    if (node->left == NULL && node->right == NULL)
-    {
-        delete node;
-    }
-    else
-    {
-        release(node->left);
-        release(node->right);
-        delete node;
-    }
-}
 
 void compress(string inputFilename, string outputFilename) {
     ofstream ofs(outputFilename.c_str(), ios::out | ios::binary);
     ifstream ifs(inputFilename.c_str(), ios::in | ios::binary);
     char ch;
-    Node* root = NULL;
     map<char,int> ch_count;
-    map<char,string> hfmtree;
-    priority_queue<Node*, vector<Node*>, cmp> heap;
     while (ifs.get(ch))
-    {
         ch_count[ch]++;
-    }
+
     string tmp = to_string(ch_count.size());
     for (unsigned i=0;i<tmp.size();i++)
         ofs << (char)tmp[i];
     ofs<<' ';
+
+    HuffmanTree hfmtree(ch_count);
     for(auto it = ch_count.begin(); it != ch_count.end(); it++)
     {
-        Node* node =new Node{it->first,it->second};
-        heap.push(node);
-        ofs<<node->ch;
-        string tmp = to_string(node->sum);
-        for (unsigned i=0;i<tmp.size();i++)
-            ofs << (char)tmp[i];
+        string counts = to_string(it->second);
+        ofs << it->first;
+        for (unsigned i=0;i<counts.size();i++)
+            ofs << (char)counts[i];
         ofs<<' ';
     }
-    while(!heap.empty())
-    {
-        Node* left = heap.top();
-        heap.pop();
-        if (!heap.empty())
-        {
-            Node* right = heap.top();
-            heap.pop();
-            Node* parent = new Node;
-            parent->sum = left->sum + right->sum;
-            parent->left = left;
-            parent->right = right;
-            heap.push(parent);
-        }
-        else
-        {
-            root = left;
-        }
-    }
-    if (root != NULL)
-        GenerateHfmcode(hfmtree, root);
 
     ifs.clear(std::ios::goodbit);
     ifs.seekg(std::ios::beg);
@@ -114,7 +134,7 @@ void compress(string inputFilename, string outputFilename) {
     char write = 0;
     while (ifs.get(ch))
     {
-        string code = hfmtree[ch];
+        string code = hfmtree.getcode(ch);
         for (unsigned i=0;i<code.size();i++)
         {
             if (bit>=0)
@@ -133,7 +153,6 @@ void compress(string inputFilename, string outputFilename) {
     ofs<<write;
     ofs.close();
     ifs.close();
-    release(root);
 }
 
 void decompress(string inputFilename, string outputFilename) {
@@ -142,10 +161,7 @@ void decompress(string inputFilename, string outputFilename) {
     char ch;
     int ch_number = 0;
     int total = 0;
-    Node* root = NULL;
     map<char,int> ch_count;
-    map<char,string> hfmtree;
-    priority_queue<Node*, vector<Node*>, cmp> heap;
 
     string tmp;
     ch = ifs.get();
@@ -170,35 +186,12 @@ void decompress(string inputFilename, string outputFilename) {
         ch_count[ch]+=stoi(tmp);
     }
 
-    for(auto it = ch_count.begin(); it != ch_count.end(); it++)
-    {
-        Node* node =new Node{it->first,it->second};
-        heap.push(node);
-    }
-    while(!heap.empty())
-    {
-        Node* left = heap.top();
-        heap.pop();
-        if (!heap.empty())
-        {
-            Node* right = heap.top();
-            heap.pop();
-            Node* parent = new Node;
-            parent->sum = left->sum + right->sum;
-            parent->left = left;
-            parent->right = right;
-            heap.push(parent);
-        }
-        else
-        {
-            root = left;
-        }
-    }
+    HuffmanTree hfmtree(ch_count);
 
     ch = ifs.get();
-    if (root != NULL)
-        total = root->sum;
-    Node* node = root;
+    if (hfmtree.getroot() != NULL)
+        total = hfmtree.getroot()->sum;
+    Node* node = hfmtree.getroot();
     if (ch_count.size() == 1)
     {
         for (int i=0;i<total;i++)
@@ -224,7 +217,7 @@ void decompress(string inputFilename, string outputFilename) {
                 if (node->left == NULL && node->right == NULL)
                 {
                     ofs<<node->ch;
-                    node = root;
+                    node = hfmtree.getroot();
                     total--;
                     if (!total)
                         break;
@@ -234,7 +227,6 @@ void decompress(string inputFilename, string outputFilename) {
         }
     }
     delete node;
-    release(root);
     ofs.close();
     ifs.close();
 }
