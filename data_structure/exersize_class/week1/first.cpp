@@ -1,98 +1,82 @@
-#include <iostream>
+﻿#include <iostream>
 #include <string>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
+string toLower(string word)
+{
+	for (int i = 0; i < word.size(); i++)
+		word[i] = tolower(word[i]);
+	return word;
+}
+
 int main()
 {
-	string word;
-	string last;
-	string next;
 	string filename;
-	char tmp[50];
-	char c;
-	char l;
-	int line = 0;
-	int count = 0;
-	int t = 0;
-	bool n = false;
-	bool no = true;
-
 	cout << "Please input the file name:";
 	//cin >> filename;
 	filename = "shakespeare.txt";
 
-	ifstream f(filename);
-	if (f.is_open())
+	ifstream file(filename);
+	if (file.is_open())
 	{
 		cout << "file has been successfully opened.\n";
 	}
 	else
-    {
-        cout << "file has not been successfully opened.\n";
-        return 1;
-    }
-
-    cout << "Please input the word you want to search:";
-    cin >> word;
-
-	while (!f.eof())
 	{
-		c = f.get();
+		cout << "file has not been successfully opened.\n";
+		return 1;
+	}
 
-		if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+	string word_tofind;
+	cout << "Please input the word you want to search:";
+	cin >> word_tofind;
+
+	string word;
+	string last;
+	string now;
+	string line;
+	int linenumber = 0;
+	int count = 0;
+	while (getline(file, line))
+	{
+		linenumber++;
+		stringstream ss(line);
+		while (ss >> word)
 		{
-			tmp[t++] = c;
-		}
-
-		else
-		{
-			tmp[t] = '\0';
-
-			if (n)
+			for (int i = 0; i < word.size(); i++)
 			{
-				n = false;
-				if (no)
+				if (!((word[i] >= 'a' && word[i] <= 'z') || (word[i] >= 'A' && word[i] <= 'Z')))
 				{
-					cout << tmp << endl;
-				}
-				else
-				{
-					cout << endl;
+					if (word[i] == '-')
+						continue;
+
+					if (word[i] == '\'')
+					{
+						word = word.substr(0, i);
+						break;
+					}
+					else
+					{
+						word.erase(i);
+						i--;
+					}
 				}
 			}
 
-			if (t >= 1)
+			if (word.size())
 			{
-				string test = tmp;
-				if (tmp == word)
+				if (now.size() == word_tofind.size() && toLower(now) == toLower(word_tofind))
 				{
+					cout << linenumber << ": " << last << '\t' << now << '\t' << word << endl;
 					count++;
-					cout << line <<' ';
-					if (tmp[0] >= 'a' && tmp[0] <= 'z' && l != ',' && l != '(')
-						cout << last << ' ';
-					cout << tmp << ' ';
-					n = true;
 				}
-				no = true;
-
-				last = tmp;
+					
+				last = now;
+				now = word;
 			}
-
-			t = 0;
-
-			if (!(c == ' ' || c == '\t'))
-			{
-				no = false;
-			}
-
-			l = c;
-		}
-
-		if (c == '\n')
-		{
-			line++;
 		}
 	}
 
