@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -16,8 +16,8 @@ int main()
 {
 	string filename;
 	cout << "Please input the file name:";
-	//cin >> filename;
-	filename = "shakespeare.txt";
+	cin >> filename;
+	//filename = "shakespeare.txt";
 
 	ifstream file(filename);
 	if (file.is_open())
@@ -40,11 +40,11 @@ int main()
 	string line;
 	int linenumber = 0;
 	int count = 0;
-	while (getline(file, line))
+	while (getline(file, line))                              //一行一行分析
 	{
 		linenumber++;
 		stringstream ss(line);
-		while (ss >> word)
+		while (ss >> word)                                //去除无效字符
 		{
 			for (int i = 0; i < word.size(); i++)
 			{
@@ -66,7 +66,7 @@ int main()
 				}
 			}
 
-			if (word.size())
+			if (word.size())            //判断单词是否有效
 			{
 				if (now.size() == word_tofind.size() && toLower(now) == toLower(word_tofind))
 				{
