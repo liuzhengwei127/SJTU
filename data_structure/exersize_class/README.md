@@ -12,5 +12,5 @@
     not finished.
     
 **description**: 
-    To divide a concave polygon to a convex polygon.
+    To split a concave polygon into convex polygons.
  
