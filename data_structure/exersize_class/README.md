@@ -8,7 +8,6 @@
     At the end, the program will print the total amount of the word.
  
 ## week2:
-***
 **state**: 
     not finished.
     
