@@ -1,5 +1,4 @@
 ## week1:
-*
 **state**: 
     done and optimized.
     
