@@ -1,4 +1,5 @@
 ## week1:
+***
 **state**: 
     done and optimized.
     
@@ -8,6 +9,7 @@
     At the end, the program will print the total amount of the word.
  
 ## week2:
+***
 **state**: 
     not finished.
     
