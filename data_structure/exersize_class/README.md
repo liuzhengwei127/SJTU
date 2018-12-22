@@ -8,9 +8,14 @@
     At the end, the program will print the total amount of the word.
  
 ## week2:
-**state**: 
+**state**:
     not finished.
     
 **description**: 
     To split a concave polygon into convex polygons.
- 
+
+## week13,week14:
+**state**:
+    essentially finished, but need further optimize.
+**description**:
+    To detect the potential users who may do money laundering in the bank.
