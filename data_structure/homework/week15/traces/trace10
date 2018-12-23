@@ -1,0 +1,8 @@
+DICT
+INSERT manatsu
+SEARCH **natus
+SEARCH **natsu
+INSERT manager
+SEARCH mana***
+---
+0 1 1

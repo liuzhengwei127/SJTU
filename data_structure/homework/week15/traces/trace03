@@ -1,0 +1,9 @@
+TRIE
+INSERT apple
+INSERT banana
+INSERT app
+SEARCH apple
+SEARCH app
+SEARCH aaa
+---
+1 1 0

@@ -1,0 +1,10 @@
+DICT
+INSERT bad
+INSERT dad
+INSERT mad
+SEARCH pad
+SEARCH bad
+SEARCH *ad
+SEARCH b**
+---
+0 1 1 1

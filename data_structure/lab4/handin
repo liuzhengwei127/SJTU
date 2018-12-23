@@ -6,6 +6,6 @@ if [ -z $1 ];then
     echo "Usage: ./handin 51703XXXXXX"
 else 
     ID=$1
-    tar czvf $ID.tar Compression
+    tar -czvf $ID.tar.gz Compression
 fi
 

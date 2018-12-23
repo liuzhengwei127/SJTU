@@ -1,0 +1,8 @@
+TRIE
+INSERT apple
+SEARCH app
+SEARCH apple
+INSERT apple
+SEARCH apple
+---
+0 1 1

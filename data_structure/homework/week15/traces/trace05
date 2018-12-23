@@ -1,0 +1,12 @@
+TRIE
+INSERT terra
+INSERT aqua
+INSERT ventus
+INSERT ignis
+SEARCH AQUA
+INSERT aquarium
+INSERT aqi
+SEARCH api
+SEARCH aqi
+---
+0 0 1

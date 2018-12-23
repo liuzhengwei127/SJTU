@@ -1,0 +1,9 @@
+DICT
+INSERT apple
+SEARCH ****
+SEARCH ***e
+SEARCH **le
+SEARCH *ple
+SEARCH pple
+---
+0 0 0 0 0

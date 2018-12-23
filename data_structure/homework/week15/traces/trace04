@@ -1,0 +1,7 @@
+TRIE
+INSERT christmas
+SEARCH christ
+INSERT christ
+SEARCH christ
+---
+0 1

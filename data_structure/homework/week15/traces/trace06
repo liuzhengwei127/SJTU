@@ -1,0 +1,5 @@
+DICT
+INSERT test
+SEARCH *est
+---
+1
