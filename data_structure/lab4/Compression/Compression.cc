@@ -22,7 +22,9 @@ public:
     {
         for(auto it = ch_count.begin(); it != ch_count.end(); it++)
         {
-            Node* node =new Node{it->first,it->second};
+            Node* node =new Node;
+            node->char = it->first;
+            node->sum = it->second;
             heap.push(node);
         }
         while(!heap.empty())
