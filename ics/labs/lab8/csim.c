@@ -124,7 +124,7 @@ void visit(Cache* cache, long address, long size) {
 
 int main(int argc, char **argv)
 {
-    int b,E,s,v;
+    int b,E,s,v,S;
     char *filename;
     char ch;
 
@@ -160,12 +160,13 @@ int main(int argc, char **argv)
     cache->E = E;
     cache->s = s;
     cache->v = v;
-    size_t size = sizeof(int) * E * (1 << s);
-    size_t cacheline = sizeof(int) * s;
+    S = 1 << s;
+    size_t size = sizeof(int) * E * S;
+    size_t cacheline = sizeof(int) * S;
     cache->line = (int *)malloc(size);
     memset(cache->line, -1, size);
     cache->head = (TimeLine **)malloc(cacheline);
-    for (int i=0;i<s;i++) {
+    for (int i=0;i<S;i++) {
         cache->head[i] = (TimeLine *) malloc(sizeof(TimeLine));
         TimeLine *tmp = cache->head[i];
         for (int j=0;j<E-1;j++) {
