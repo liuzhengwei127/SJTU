@@ -1,0 +1,5 @@
+1. ps x -x comm= | sort -d
+2. cat /usr/share/dict/words | grep ^a | wc -w
+3. ls -l -S -r /etc/*.conf | head -n 5
+4. echo 'hello world!' > echo.sh; chmod +x echo.sh
+

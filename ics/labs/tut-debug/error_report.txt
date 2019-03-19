@@ -1,0 +1,104 @@
+/*
+ * BUG#0
+ * description: 
+     miss semicolon
+ * location: 
+ *   int a = 10  (line 18)
+ * evidence: 
+ *   test.c:19: error: two or more data types in declaration specifiers
+ */
+
+BUG#1
+description:
+  miss ';'
+location:
+  enum { buf_size = buf_nrec * 100 } (line 52)
+evidence:
+  gen_sort.c:54:9: error:expected ';' , identifier or '(' before 'struct'
+
+
+BUG#2
+description:
+  miss ';'
+location:
+  } record_t (line 58)
+evidence:
+gen_sort.c:60:1: error expected '=' , ',' , ';' , 'asm' or '__attribute__' before 'static'
+
+
+BUG#3
+description:
+  mistake 'record_t' as 'record'
+location:
+  gen_rec(record *rec) (line 114)
+evidence:
+  gen_sort.c:114:9: error unknowm type name 'record' ; did you mean 'record_t'
+
+
+BUG#4
+description:
+  there is no library named 'stdio.h' including some functions the program needs
+location:
+  sprintf(rec->recno, "%10d", recno++); (line 122)
+evidence:
+  gen_sort.c:122:2: warning: implicit declaration of function 'sprintf' 
+
+
+BUG#5
+description:
+  miss '{'
+location:
+  if (!file){ (line 188)
+evidence:
+  gen_sort.c:194:2: error: expected identifier or '(' before 'while'
+
+
+BUG#6
+description:
+  wrong parameter 'r' for function 'fopen'
+location:
+  FILE *file = fopen(fn, "r"); (line 187)
+evidence:
+  error: write to outfile
+
+
+
+BUG#7
+description:
+  mistake 'j' as 'i' leading to endless loop
+location:
+  for (j = 0; j < 10; i++) (line 125)
+evidence:
+  Program terminated with signal SIGSEGV, Segmentation fault.
+
+
+
+BUG#8
+description:
+  not malloc enough space for 'buf'
+location:
+  char *buf = (char *)malloc(buf_nrec); (line 181)
+evidence:
+  after calling the function 'fill_buf(buf)' the program ended with
+"Program terminated with signal SIGSEGV, Segmentation fault."
+
+
+
+BUG#9
+description:
+  wrong length for 'rec_len'
+location:
+  enum { rec_len = key_len + pad_len }; (lien 49)
+evidence:
+  the output of the program doesn't have a correct length
+
+
+
+BUG#10
+description:
+  an extra round of loop when filling the buffer
+location:
+  for (cnt = 0; (cnt < buf_nrec) (line 147)
+evidence:
+  when the second argument exceeds 16, the program ended with
+"Program terminated with signal SIGSEGV, Segmentation fault."
