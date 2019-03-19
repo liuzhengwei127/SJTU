@@ -173,6 +173,7 @@ int main(int argc, char **argv)
             tmp->later = (TimeLine *) malloc(sizeof(TimeLine));
             tmp = tmp->later;
         }
+        tmp->index = (i+1)*E-1;
         tmp->later = NULL;
     }
 
