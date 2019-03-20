@@ -39,6 +39,8 @@ void visit(Cache* cache, long address, long size) {
 
     if (hit == -1) {
         misses++;
+        if (cache->v == 1)
+            printf("miss ");
         if (empty >= 0) {
             cache->line[empty] = tag;
 
@@ -73,6 +75,8 @@ void visit(Cache* cache, long address, long size) {
 
         } else {
             evictions++;
+            if (cache->v == 1)
+                printf("eviction ");
             if (cache->E >1) {
                 TimeLine *update = cache->head[set];
                 cache->head[set] = update->later;
@@ -90,7 +94,8 @@ void visit(Cache* cache, long address, long size) {
         }
     } else {
         hits++;
-
+        if (cache->v == 1)
+            printf("hit ");
         //update timeline
         if (cache->E > 1) {
             TimeLine *update = NULL;
@@ -162,7 +167,7 @@ int main(int argc, char **argv)
     cache->v = v;
     S = 1 << s;
     size_t size = sizeof(int) * E * S;
-    size_t cacheline = sizeof(int) * S;
+    size_t cacheline = sizeof(TimeLine *) * S;
     cache->line = (int *)malloc(size);
     memset(cache->line, -1, size);
     cache->head = (TimeLine **)malloc(cacheline);
@@ -187,13 +192,15 @@ int main(int argc, char **argv)
         char operation;
         long address, size;
         sscanf(line, " %c %lx,%lx", &operation, &address, &size);
-        if (v==1) {
-            //printf("%c %lx,%lx ", mode, addr, size);
-            printf("\n");
+        if (v == 1) {
+            printf("%c %lx,%lx ", operation, address, size);
         }
         visit(cache, address, size);
         if (operation == 'M') {
             visit(cache, address, size);
+        }
+        if (v == 1) {
+            printf("\n");
         }
     }
 
