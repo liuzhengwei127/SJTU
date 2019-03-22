@@ -137,42 +137,50 @@ void trans21(int M, int N, int A[N][M], int B[M][N])
                 B[i+2][j+m+4]=tmp6;
                 B[i+3][j+m+4]=tmp7;
             }
-            for (int m=4;m<8;m++){
-                tmp0 = A[j+m][i];
-                tmp1 = A[j+m][i+1];
-                tmp2 = A[j+m][i+2];
-                tmp3 = A[j+m][i+3];
-                tmp4 = A[j+m][i+4];
-                tmp5 = A[j+m][i+5];
-                tmp6 = A[j+m][i+6];
-                tmp7 = A[j+m][i+7];
-                B[i+4][j+m-4]=tmp0;
-                B[i+5][j+m-4]=tmp1;
-                B[i+6][j+m-4]=tmp2;
-                B[i+7][j+m-4]=tmp3;
-                B[i+4][j+m]=tmp4;
-                B[i+5][j+m]=tmp5;
-                B[i+6][j+m]=tmp6;
-                B[i+7][j+m]=tmp7;
-            }
-
             for (int n=0;n<4;n++){
+                tmp4 = A[j+4][i+n];
+                tmp5 = A[j+5][i+n];
+                tmp6 = A[j+6][i+n];
+                tmp7 = A[j+7][i+n];
                 tmp0 = B[i+n][j+4];
                 tmp1 = B[i+n][j+5];
                 tmp2 = B[i+n][j+6];
                 tmp3 = B[i+n][j+7];
-                tmp4 = B[i+n+4][j];
-                tmp5 = B[i+n+4][j+1];
-                tmp6 = B[i+n+4][j+2];
-                tmp7 = B[i+n+4][j+3];
-                B[i+n+4][j] = tmp0;
-                B[i+n+4][j+1] = tmp1;
-                B[i+n+4][j+2] = tmp2;
-                B[i+n+4][j+3] = tmp3;
                 B[i+n][j+4] = tmp4;
                 B[i+n][j+5] = tmp5;
                 B[i+n][j+6] = tmp6;
                 B[i+n][j+7] = tmp7;
+                B[i+n+4][j] = tmp0;
+                B[i+n+4][j+1] = tmp1;
+                B[i+n+4][j+2] = tmp2;
+                B[i+n+4][j+3] = tmp3;
+            }
+
+            for (int n=4;n<8;n++){
+                tmp0 = A[j+n][i+4];
+                tmp1 = A[j+n][i+5];
+                tmp2 = A[j+n][i+6];
+                tmp3 = A[j+n][i+7];
+                B[i+4][j+n] = tmp0;
+                B[i+5][j+n] = tmp1;
+                B[i+6][j+n] = tmp2;
+                B[i+7][j+n] = tmp3;
+            }
+        }
+    }
+}
+
+char trans3_desc[] = "Test3";
+void trans3(int M, int N, int A[N][M], int B[M][N])
+{
+    int tmp;
+    for (int i=0;i<N;i+=16){
+        for (int j=0;j<M;j+=16){
+            for (int m=i;m<i+16&&m<N;m++){
+                for (int n=j;n<j+16&&n<M;n++){
+                    tmp=A[m][n];
+                    B[n][m]=tmp;
+                }
             }
         }
     }
@@ -191,11 +199,12 @@ void registerFunctions()
     registerTransFunction(transpose_submit, transpose_submit_desc);
 
     /* Register any additional transpose functions */
-    //registerTransFunction(trans, trans_desc);
+    registerTransFunction(trans, trans_desc);
     //registerTransFunction(trans1, trans1_desc);
     //registerTransFunction(trans11, trans11_desc);
-    registerTransFunction(trans2, trans2_desc);
-    registerTransFunction(trans21, trans21_desc);
+    //registerTransFunction(trans2, trans2_desc);
+    //registerTransFunction(trans21, trans21_desc);
+    registerTransFunction(trans3, trans3_desc);
 }
 
 /*
