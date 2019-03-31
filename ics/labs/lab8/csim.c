@@ -221,6 +221,12 @@ int main(int argc, char **argv)
         }
     }
 
+    free(cache->line);
+    for (int i=0;i<S;i++)
+        free(cache->head[i]);
+    free(cache->head);
+    free(cache);
+
     printSummary(hits, misses, evictions);
 
     fclose(file);
